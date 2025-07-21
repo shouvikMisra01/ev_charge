@@ -58,7 +58,7 @@ class UserHomeView extends GetView<UserController> {
                     ),
                     const SizedBox(width: 12),
                     ElevatedButton.icon(
-                      onPressed: controller._getCurrentLocation,
+                      onPressed: controller.getCurrentLocation,
                       icon: const Icon(Icons.my_location),
                       label: const Text('Near Me'),
                     ),
@@ -192,7 +192,7 @@ class UserHomeView extends GetView<UserController> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
-                                      onPressed: () => controller._selectProvider(provider),
+                                      onPressed: () => controller.selectProvider(provider),
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(vertical: 8),
                                       ),

@@ -27,7 +27,7 @@ class UserController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _getCurrentLocation();
+    getCurrentLocation();
     _loadProviders();
   }
 
@@ -37,7 +37,7 @@ class UserController extends GetxController {
     super.onClose();
   }
 
-  Future<void> _getCurrentLocation() async {
+  Future<void> getCurrentLocation() async {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -121,7 +121,7 @@ class UserController extends GetxController {
           infoWindow: InfoWindow(
             title: provider.name,
             snippet: '₹${provider.pricePerHour}/hour - ${provider.chargerType.toUpperCase()}',
-            onTap: () => _selectProvider(provider),
+            onTap: () => selectProvider(provider),
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(
             provider.chargerType == 'fast' ? BitmapDescriptor.hueRed : BitmapDescriptor.hueGreen,
@@ -131,7 +131,7 @@ class UserController extends GetxController {
     }
   }
 
-  void _selectProvider(ProviderModel provider) {
+  void selectProvider(ProviderModel provider) {
     selectedProvider.value = provider;
     _showProviderBottomSheet();
   }

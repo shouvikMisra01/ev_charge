@@ -1,44 +1,91 @@
+// Top-level plugin declarations
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-android {
-    namespace = "com.example.charge_at_home"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+// Function to read local properties like the Flutter SDK path
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
 
+// Read Flutter version info from local properties
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+// Main Android configuration block
+android {
+    // Specifies the namespace for your app's generated R class.
+    // This must match the package name in your AndroidManifest.xml.
+    namespace "com.example.charge_at_home" // <<<--- IMPORTANT: MAKE SURE THIS MATCHES YOUR PACKAGE NAME
+
+    // Sets the SDK version to compile against. Using 34 is recommended.
+    compileSdkVersion 34
+
+    // Specifies the NDK version to use from the Flutter SDK.
+    ndkVersion flutter.ndkVersion
+
+    // Configures Java and Kotlin compiler options to a modern, compatible version.
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = '17'
     }
 
+    // Specifies the source sets for your project.
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    // Default configuration for all build variants.
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.charge_at_home"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        // TODO: Specify your own unique Application ID.
+        applicationId "com.example.charge_at_home" // <<<--- IMPORTANT: MAKE SURE THIS MATCHES YOUR PACKAGE NAME
+        
+        // Defines the minimum API level required to run the app.
+        minSdkVersion 21
+
+        // Defines the API level the app is designed to run on.
+        targetSdkVersion 34
+        
+        // Sets the version code and name from the values read earlier.
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
     }
 
+    // Configures build types (e.g., debug, release).
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            // For now, it uses the debug signing config.
+            // See https://docs.flutter.dev/deployment/android#signing-the-app
+            signingConfig signingConfigs.debug
         }
     }
 }
 
+// Flutter-specific Gradle configurations.
 flutter {
-    source = "../.."
+    source '../..'
+}
+
+// Dependencies for your app.
+dependencies {
+    // Add your app-specific dependencies here if needed.
 }
